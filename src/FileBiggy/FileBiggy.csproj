@@ -45,23 +45,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\IdentityAttribute.cs" />
     <Compile Include="BiggyContext.cs" />
-    <Compile Include="BiggyList.cs" />
+    <Compile Include="ConnectionStringConstants.cs" />
+    <Compile Include="Factory\Builder.cs" />
+    <Compile Include="Factory\ContextBuilder.cs" />
+    <Compile Include="Factory\ContextFactory.cs" />
+    <Compile Include="EntitySet.cs" />
     <Compile Include="Common\FileUtilities.cs" />
     <Compile Include="Common\DirectoryUtilities.cs" />
+    <Compile Include="Common\IdentityHelper.cs" />
     <Compile Include="Common\TypeHelper.cs" />
     <Compile Include="Contracts\IStorageConfiguration.cs" />
-    <Compile Include="Exceptions\InvalidConnectionStringException - Copy.cs" />
+    <Compile Include="Exceptions\IdentityAttributeMismatchException.cs" />
+    <Compile Include="Exceptions\InvalidConnectionStringException.cs" />
     <Compile Include="Exceptions\EntityTypeException.cs" />
     <Compile Include="Exceptions\InvalidProviderException.cs" />
+    <Compile Include="Factory\JsonContextBuilder.cs" />
     <Compile Include="Json\BiggyListSerializer.cs" />
-    <Compile Include="FileSystemStore.cs" />
-    <Compile Include="Contracts\IBiggy.cs" />
+    <Compile Include="Common\FileSystemStore.cs" />
+    <Compile Include="Contracts\IEntitySet.cs" />
     <Compile Include="Contracts\IBiggyStore.cs" />
     <Compile Include="Memory\MemoryStore.cs" />
     <Compile Include="Json\JsonStore.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StoreBase.cs" />
+    <Compile Include="Common\StoreBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

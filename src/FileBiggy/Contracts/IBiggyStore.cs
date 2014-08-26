@@ -6,7 +6,7 @@ namespace FileBiggy.Contracts
 {
     public interface IBiggyStore<T>
     {
-        List<T> Load();
+        List<T> All();
         void Clear();
         void Add(T item);
         void Add(List<T> items);

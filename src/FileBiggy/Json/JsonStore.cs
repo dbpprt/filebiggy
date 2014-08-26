@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using FileBiggy.Common;
+using FileBiggy.Properties;
 using Newtonsoft.Json;
 
 namespace FileBiggy.Json
 {
     [JsonConverter(typeof (BiggyListSerializer))]
+    [UsedImplicitly]
     public class JsonStore<T> : FileSystemStore<T> where T : new()
     {
         public JsonStore(Dictionary<string, string> connectionString) 

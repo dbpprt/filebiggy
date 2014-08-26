@@ -2,20 +2,52 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using FileBiggy.Common;
 using FileBiggy.Contracts;
 
 namespace FileBiggy.Memory
 {
+    /// <summary>
+    /// This is just an idea to implement key-value store at store base
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class MemoryStore<T> : StoreBase<T> where T : new()
     {
-        private readonly List<T> _items;
+        //private readonly List<T> _items;
         private readonly ReaderWriterLockSlim _lock;
+        private readonly Dictionary<object, T> _items;
 
         public MemoryStore(Dictionary<string, string> connectionString) 
             : base(connectionString)
         {
-            _items = new List<T>();
+            _items = new Dictionary<object, T>();
             _lock = new ReaderWriterLockSlim();
+        }
+
+        public override T Find(object id)
+        {
+            try
+            {
+                _lock.EnterReadLock();
+                T result;
+
+                if (_items.TryGetValue(id, out result))
+                {
+                    return result;
+                }
+
+                throw new ArgumentException("id");
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
+        }
+
+        private object GetKey(T item)
+        {
+            var identity = item.GetKeyFromEntity();
+            return identity ?? Guid.NewGuid();
         }
 
         public override void Add(T item)
@@ -23,7 +55,7 @@ namespace FileBiggy.Memory
             try
             {
                 _lock.EnterWriteLock();
-                _items.Add(item);
+                _items.Add(GetKey(item), item);
             }
             finally
             {
@@ -32,12 +64,12 @@ namespace FileBiggy.Memory
            
         }
 
-        public override List<T> Load()
+        public override List<T> All()
         {
             try
             {
                 _lock.EnterReadLock();
-                return _items.ToList();
+                return _items.Select(tuple => tuple.Value).ToList();
             }
             finally
             {
@@ -50,7 +82,11 @@ namespace FileBiggy.Memory
             try
             {
                 _lock.EnterWriteLock();
-                _items.AddRange(items);
+
+                foreach (var item in items)
+                {
+                    _items.Add(GetKey(item), item);
+                }
             }
             finally
             {
@@ -76,7 +112,7 @@ namespace FileBiggy.Memory
             try
             {
                 _lock.EnterWriteLock();
-                _items.Remove(item);
+                _items.Remove(GetKey(item));
             }
             finally
             {
@@ -92,7 +128,7 @@ namespace FileBiggy.Memory
 
                 foreach (var item in items)
                 {
-                    _items.Remove(item);
+                    _items.Remove(GetKey(item));
                 }
             }
             finally
@@ -107,15 +143,9 @@ namespace FileBiggy.Memory
             {
                 _lock.EnterWriteLock();
 
-                var index = _items.IndexOf(item);
+                _items.Remove(GetKey(item));
+                _items.Add(GetKey(item), item);
 
-                if (index <= -1)
-                {
-                    return item;
-                }
-
-                _items.RemoveAt(index);
-                _items.Insert(index, item);
                 return item;
             }
             finally
@@ -131,7 +161,7 @@ namespace FileBiggy.Memory
                 _lock.EnterReadLock();
                 // this should create a unique list instance, so that we dont get any
                 // side effects when using the returned list and exit the readlock
-                return _items.ToList().AsQueryable();
+                return _items.Select(tuple => tuple.Value).ToList().AsQueryable();
             }
             finally
             {

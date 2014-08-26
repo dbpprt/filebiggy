@@ -23,13 +23,13 @@ namespace FileBiggy.Json
             var list = value as IEnumerable;
 
             // Loop over all items in the list
-            foreach (object item in list)
+            foreach (var item in list)
             {
                 // Serialize the object to the writer
                 serializer.Serialize(writer, item);
 
                 // Separate with newline characters
-                writer.WriteRaw("\r\n");
+                writer.WriteRaw(Environment.NewLine);
             }
         }
     }

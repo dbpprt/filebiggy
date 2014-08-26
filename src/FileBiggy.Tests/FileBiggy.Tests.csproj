@@ -36,6 +36,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="xunit">
+      <HintPath>..\packages\xunit.1.9.2\lib\net20\xunit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -50,8 +53,22 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="BasicMultithreading.cs" />
+    <Compile Include="ContextFactoryTests.cs" />
+    <Compile Include="BasicTests.cs" />
+    <Compile Include="ExistingTests\BiggyListWithFileDb.cs" />
+    <Compile Include="IdentityHelperTests.cs" />
+    <Compile Include="IdentityMemoryStoreTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FileBiggy\FileBiggy.csproj">
+      <Project>{28A420D7-5333-4D19-9284-049F6317C9B1}</Project>
+      <Name>FileBiggy</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

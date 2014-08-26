@@ -4,15 +4,15 @@ using System.Linq;
 
 namespace FileBiggy.Contracts
 {
-    public interface IBiggy<T> : IEnumerable<T>
+    public interface IEntitySet<T> : IEnumerable<T>
     {
         void Clear();
         int Count();
         T Update(T item);
-        T Remove(T item);
-        IList<T> Remove(List<T> items);
-        T Add(T item);
-        IList<T> Add(List<T> items);
+        void Remove(T item);
+        void Remove(IEnumerable<T> items);
+        void Add(T item);
+        void Add(List<T> items);
         IQueryable<T> AsQueryable();
     }
 }

@@ -2,7 +2,7 @@
 using System.Linq;
 using FileBiggy.Contracts;
 
-namespace FileBiggy
+namespace FileBiggy.Common
 {
     public abstract class StoreBase<T> : IBiggyStore<T>
     {
@@ -24,7 +24,8 @@ namespace FileBiggy
             }
         }
 
-        public abstract List<T> Load();
+        public abstract T Find(object id);
+        public abstract List<T> All();
         public abstract void Clear();
         public abstract void Add(T item);
         public abstract void Add(List<T> items);
