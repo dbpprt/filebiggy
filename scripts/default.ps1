@@ -5,10 +5,15 @@ properties {
     $scripts_dir = "$base_dir\scripts"
     $sln_file = "$base_dir\src\FileBiggy.sln"
     $src_dir = "$base_dir\src"
-
+	$src_packages = "$src_dir\packages"
+	
+	$nuget_path = "$base_dir\.nuget\NuGet.exe"
+	
+	$nuspec_path = "$base_dir\FileBiggy.nuspec"
+	
     $environment = ""   
 	$revision = "1"    
-	$version = "1.0.0." 
+	$version = "0.0." 
 	
     $header = "$base_dir\header-agpl.txt"
 
@@ -19,7 +24,19 @@ Framework "4.5.1x64"
 
 task default -depends Clean, Compile
 
-task release -depends Clean, Version, Compile, Zip
+task release -depends Clean, Version, Restore-Packages, Compile, Create-Nuget-Package
+
+Task Restore-Packages -Description "Restores all nuget packages" {
+    $packageConfigs = Get-ChildItem $src_dir -Recurse | where{$_.Name -eq "packages.config"}
+    foreach($packageConfig in $packageConfigs){
+        Write-Host "Restoring" $packageConfig.FullName
+        & $nuget_path i $packageConfig.FullName -o $src_packages
+    }
+}
+
+Task Create-Nuget-Package -Description "Creates the nuget package" {
+	& $nuget_path pack $nuspec_path -o $base_dir
+}
 
 Task Zip -Description "Package the output" {
     . "$scripts_dir\zip.ps1"
@@ -35,9 +52,8 @@ Task Version -Description "Version the assemblies" {
 
 task Clean -Description "Clean the build directory" {
 	$dest = "$build_dir.zip"
-
     if (Test-Path($dest)) { rm $dest }
-	
+		
     @($build_dir) | Where-Object { Test-Path $_ } | ForEach-Object {
         Write-Host "Cleaning folder $_..."
         Remove-Item $_ -Recurse -Force -ErrorAction Stop

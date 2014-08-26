@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>FileBiggy</id>
+    <version>0.0.1</version>
+    <authors>Dennis Bappert</authors>
+    <owners>Dennis Bappert</owners>
+    <licenseUrl>https://github.com/flumbee/filebiggy/blob/master/LICENSE.md</licenseUrl>
+    <projectUrl>https://github.com/flumbee/filebiggy/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A simple json document store with an entityframework like context</description>
+    <releaseNotes>Initial release</releaseNotes>
+    <copyright>Copyright 2014</copyright>
+    <tags>document store</tags>
+    <dependencies>
+      <dependency id="Inflector" version="1.0.0.0" />
+      <dependency id="Newtonsoft.Json" version="6.0.4" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="build\FileBiggy.dll" target="lib\net45" />
+  </files>
+</package>

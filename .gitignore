@@ -140,6 +140,8 @@ csx/
 # Windows Store app package directory
 AppPackages/
 
+*.nupkg
+
 # Others
 sql/
 *.Cache
