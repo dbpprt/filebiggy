@@ -8,7 +8,7 @@ using FileBiggy.Exceptions;
 
 namespace FileBiggy
 {
-    public class BiggyContext
+    public class BiggyContext : IBiggyContext
     {
         private readonly Dictionary<Type, object> _typeStores;
 

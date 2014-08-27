@@ -9,7 +9,7 @@ namespace FileBiggy.Contracts
         Task<List<T>> AllAsync();
         Task ClearAsync();
         Task AddAsync(T item);
-        Task AddAsync(List<T> items);
+        Task AddAsync(IEnumerable<T> items);
         Task<T> UpdateAsync(T item);
         Task RemoveAsync(T item);
         Task RemoveAsync(IEnumerable<T> items);

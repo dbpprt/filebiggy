@@ -77,7 +77,7 @@ namespace FileBiggy.Bson
             UpdateFileSystemItem(item);
         }
 
-        protected override void AddFileSystemItems(List<T> items)
+        protected override void AddFileSystemItems(IEnumerable<T> items)
         {
             foreach (var item in items)
             {
@@ -139,7 +139,7 @@ namespace FileBiggy.Bson
             return UpdateFileSystemItemAsync(item);
         }
 
-        protected override Task AddFileSystemItemsAsync(List<T> items)
+        protected override Task AddFileSystemItemsAsync(IEnumerable<T> items)
         {
             var tasks = items.Select(AddFileSystemItemAsync);
             return Task.WhenAll(tasks);

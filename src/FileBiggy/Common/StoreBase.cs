@@ -35,7 +35,7 @@ namespace FileBiggy.Common
         public abstract List<T> All();
         public abstract void Clear();
         public abstract void Add(T item);
-        public abstract void Add(List<T> items);
+        public abstract void Add(IEnumerable<T> items);
         public abstract T Update(T item);
         public abstract void Remove(T item);
         public abstract void Remove(IEnumerable<T> items);
@@ -43,7 +43,7 @@ namespace FileBiggy.Common
         public abstract Task<List<T>> AllAsync();
         public abstract Task ClearAsync();
         public abstract Task AddAsync(T item);
-        public abstract Task AddAsync(List<T> items);
+        public abstract Task AddAsync(IEnumerable<T> items);
         public abstract Task<T> UpdateAsync(T item);
         public abstract Task RemoveAsync(T item);
         public abstract Task RemoveAsync(IEnumerable<T> items);

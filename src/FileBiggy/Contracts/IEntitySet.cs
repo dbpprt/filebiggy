@@ -11,7 +11,7 @@ namespace FileBiggy.Contracts
         void Remove(T item);
         void Remove(IEnumerable<T> items);
         void Add(T item);
-        void Add(List<T> items);
+        void Add(IEnumerable<T> items);
         IQueryable<T> AsQueryable();
     }
 }

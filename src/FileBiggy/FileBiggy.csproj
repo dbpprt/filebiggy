@@ -76,6 +76,8 @@
     <Compile Include="Exceptions\InvalidProviderException.cs" />
     <Compile Include="Factory\BsonContextBuilder.cs" />
     <Compile Include="Factory\JsonContextBuilder.cs" />
+    <Compile Include="Contracts\IBiggyContext.cs" />
+    <Compile Include="IoC\Repository.cs" />
     <Compile Include="Json\BiggyListSerializer.cs" />
     <Compile Include="Common\FileSystemStore.cs" />
     <Compile Include="Contracts\IEntitySet.cs" />

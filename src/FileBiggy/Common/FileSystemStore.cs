@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using FileBiggy.Contracts;
 using FileBiggy.Exceptions;
 using Nito.AsyncEx;
 
@@ -81,18 +79,20 @@ namespace FileBiggy.Common
             }
         }
 
-        public override void Add(List<T> items)
+        public override void Add(IEnumerable<T> items)
         {
             using (_lock.WriterLock())
             {
                 // this is not nice.. you want to add 10 items, it inserts 8 and the
                 // ninth gets a duplicate key exception
-                foreach (var item in items)
+                var enumerable = items as T[] ?? items.ToArray();
+
+                foreach (var item in enumerable)
                 {
                     Items.Add(GetKey(item), item);
                 }
 
-                AddFileSystemItems(items);
+                AddFileSystemItems(enumerable);
             }
         }
 
@@ -141,18 +141,20 @@ namespace FileBiggy.Common
             }
         }
 
-        public override async Task AddAsync(List<T> items)
+        public override async Task AddAsync(IEnumerable<T> items)
         {
             using (await _lock.WriterLockAsync())
             {
                 // this is not nice.. you want to add 10 items, it inserts 8 and the
                 // ninth gets a duplicate key exception
-                foreach (var item in items)
+                var enumerable = items as T[] ?? items.ToArray();
+
+                foreach (var item in enumerable)
                 {
                     Items.Add(GetKey(item), item);
                 }
 
-                await AddFileSystemItemsAsync(items);
+                await AddFileSystemItemsAsync(enumerable);
             }
         }
 
@@ -221,7 +223,7 @@ namespace FileBiggy.Common
 
         protected abstract void AddFileSystemItem(T item);
 
-        protected abstract void AddFileSystemItems(List<T> item);
+        protected abstract void AddFileSystemItems(IEnumerable<T> item);
 
         protected abstract void ClearFileSystemItems();
 
@@ -237,7 +239,7 @@ namespace FileBiggy.Common
 
         protected abstract Task AddFileSystemItemAsync(T item);
 
-        protected abstract Task AddFileSystemItemsAsync(List<T> item);
+        protected abstract Task AddFileSystemItemsAsync(IEnumerable<T> item);
 
         protected abstract Task ClearFileSystemItemsAsync();
 

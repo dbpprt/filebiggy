@@ -98,7 +98,7 @@ namespace FileBiggy.Json
             }
         }
 
-        protected override void AddFileSystemItems(List<T> item)
+        protected override void AddFileSystemItems(IEnumerable<T> item)
         {
             using (var stream = new FileStream(DatabaseFilePath, FileMode.Append))
             {
@@ -162,7 +162,7 @@ namespace FileBiggy.Json
             }
         }
 
-        protected override async Task AddFileSystemItemsAsync(List<T> item)
+        protected override async Task AddFileSystemItemsAsync(IEnumerable<T> item)
         {
             using (var stream = new FileStream(DatabaseFilePath, FileMode.Append))
             {

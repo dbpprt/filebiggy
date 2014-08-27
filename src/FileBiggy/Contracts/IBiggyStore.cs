@@ -8,7 +8,7 @@ namespace FileBiggy.Contracts
         List<T> All();
         void Clear();
         void Add(T item);
-        void Add(List<T> items);
+        void Add(IEnumerable<T> items);
         T Update(T item);
         void Remove(T item);
         void Remove(IEnumerable<T> items);

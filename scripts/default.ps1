@@ -12,7 +12,7 @@ properties {
 	$nuspec_path = "$base_dir\FileBiggy.nuspec"
 	
     $environment = ""   
-	$revision = "2"    
+	$revision = "3"    
 	$version = "0.0." 
 	
     $header = "$base_dir\header-agpl.txt"

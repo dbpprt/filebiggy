@@ -70,7 +70,7 @@ namespace FileBiggy.Memory
             }
         }
 
-        public override void Add(List<T> items)
+        public override void Add(IEnumerable<T> items)
         {
             try
             {
@@ -147,7 +147,7 @@ namespace FileBiggy.Memory
             return Task.FromResult(0);
         }
 
-        public override Task AddAsync(List<T> items)
+        public override Task AddAsync(IEnumerable<T> items)
         {
             Add(items);
             return Task.FromResult(0);

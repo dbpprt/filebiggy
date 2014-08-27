@@ -64,7 +64,7 @@ namespace FileBiggy
             _store.Add(item);
         }
 
-        public virtual void Add(List<T> items)
+        public virtual void Add(IEnumerable<T> items)
         {
             _store.Add(items);
         }
@@ -99,7 +99,7 @@ namespace FileBiggy
             return _store.AddAsync(item);
         }
 
-        public Task AddAsync(List<T> items)
+        public Task AddAsync(IEnumerable<T> items)
         {
             return _store.AddAsync(items);
         }
