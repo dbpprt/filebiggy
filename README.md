@@ -99,7 +99,7 @@ var darkKnight = movies.Where(movie => movie.Name.Contains("Dark"));
 
 ## How to install
 
-Just grad the FileBiggy package from nuget and install it
+Just grab the FileBiggy package from nuget and install it
 
 ```
 Install-Package FileBiggy
