@@ -95,7 +95,7 @@ var darkKnight = movies.Where(movie => movie.Name.Contains("Dark"));
 - BsonStore requires a Guid Identity
 - BsonStore isnt really optimized at the moment but quite good for storing files
 
-## Howto install
+## How to install
 
 Just grad the FileBiggy package from nuget and install it
 
