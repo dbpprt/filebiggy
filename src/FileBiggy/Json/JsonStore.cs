@@ -51,7 +51,6 @@ namespace FileBiggy.Json
                 var serializer = JsonSerializer.CreateDefault();
                 var biggySerializer = new BiggyListSerializer();
                 biggySerializer.WriteJson(writer, items, serializer);
-                
             }
         }
 
@@ -75,7 +74,10 @@ namespace FileBiggy.Json
         {
             using (var writer = new StreamWriter(stream))
             {
-                foreach (var json in items.Select(async item => await Task.Factory.StartNew(() => JsonConvert.SerializeObject(item))))
+                foreach (
+                    var json in
+                        items.Select(async item => await Task.Factory.StartNew(() => JsonConvert.SerializeObject(item)))
+                    )
                 {
                     await writer.WriteLineAsync(await json);
                 }
@@ -158,7 +160,7 @@ namespace FileBiggy.Json
         {
             using (var stream = new FileStream(DatabaseFilePath, FileMode.Append))
             {
-                await AppendAsync(stream, new[] { item });
+                await AppendAsync(stream, new[] {item});
             }
         }
 

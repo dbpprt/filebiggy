@@ -2,16 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using FileBiggy.Contracts;
 
 namespace FileBiggy.IoC
 {
-    public class Repository<T> : IEntitySet<T> where T : class, new() 
+    public class Repository<T> : IEntitySet<T> where T : class, new()
     {
         private readonly IBiggyContext _context;
-        private readonly IEntitySet<T> _underlayingSet; 
+        private readonly IEntitySet<T> _underlayingSet;
 
         public Repository(
             IBiggyContext context)
@@ -122,7 +121,7 @@ namespace FileBiggy.IoC
         public void Remove(IEnumerable<T> items)
         {
             var enumerable = items as T[] ?? items.ToArray();
-            
+
             foreach (var item in enumerable)
             {
                 BeforeDelete(item);
