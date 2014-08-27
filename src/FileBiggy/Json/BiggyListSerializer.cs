@@ -32,5 +32,7 @@ namespace FileBiggy.Json
                 writer.WriteRaw(Environment.NewLine);
             }
         }
+
+        
     }
 }

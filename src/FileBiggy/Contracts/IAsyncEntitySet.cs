@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace FileBiggy.Contracts
+{
+    public interface IAsyncEntitySet<T>
+    {
+        Task ClearAsync();
+        Task<T> UpdateAsync(T item);
+        Task RemoveAsync(T item);
+        Task RemoveAsync(IEnumerable<T> items);
+        Task AddAsync(T item);
+        Task AddAsync(List<T> items);
+    }
+}

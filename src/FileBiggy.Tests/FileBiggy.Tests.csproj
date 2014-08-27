@@ -53,6 +53,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AsyncTests.cs" />
     <Compile Include="BasicMultithreading.cs" />
     <Compile Include="ContextFactoryTests.cs" />
     <Compile Include="BasicTests.cs" />

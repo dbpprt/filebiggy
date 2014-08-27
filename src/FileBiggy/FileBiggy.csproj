@@ -36,6 +36,15 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Nito.AsyncEx">
+      <HintPath>..\packages\Nito.AsyncEx.2.1.3\lib\net45\Nito.AsyncEx.dll</HintPath>
+    </Reference>
+    <Reference Include="Nito.AsyncEx.Concurrent">
+      <HintPath>..\packages\Nito.AsyncEx.2.1.3\lib\net45\Nito.AsyncEx.Concurrent.dll</HintPath>
+    </Reference>
+    <Reference Include="Nito.AsyncEx.Enlightenment">
+      <HintPath>..\packages\Nito.AsyncEx.2.1.3\lib\net45\Nito.AsyncEx.Enlightenment.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,6 +58,8 @@
     <Compile Include="BiggyContext.cs" />
     <Compile Include="Bson\BsonStore.cs" />
     <Compile Include="ConnectionStringConstants.cs" />
+    <Compile Include="Contracts\IAsyncEntitySet.cs" />
+    <Compile Include="Contracts\IAsyncBiggyStore.cs" />
     <Compile Include="Exceptions\InvalidIdentityTypeException.cs" />
     <Compile Include="Factory\Builder.cs" />
     <Compile Include="Factory\ContextBuilder.cs" />

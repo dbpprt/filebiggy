@@ -2,17 +2,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using FileBiggy.Common;
 using FileBiggy.Contracts;
 using FileBiggy.Properties;
 
 namespace FileBiggy
 {
     [UsedImplicitly]
-    public class EntitySet<T> : IEntitySet<T> where T : new()
+    public class EntitySet<T> : IEntitySet<T>, IAsyncEntitySet<T> where T : new()
     {
-        private readonly IBiggyStore<T> _store;
+        private readonly StoreBase<T> _store;
 
-        public EntitySet(IBiggyStore<T> store)
+        public EntitySet(StoreBase<T> store)
         {
             if (store == null)
             {
@@ -70,6 +72,36 @@ namespace FileBiggy
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public Task ClearAsync()
+        {
+            return _store.ClearAsync();
+        }
+
+        public Task<T> UpdateAsync(T item)
+        {
+            return _store.UpdateAsync(item);
+        }
+
+        public Task RemoveAsync(T item)
+        {
+            return _store.RemoveAsync(item);
+        }
+
+        public Task RemoveAsync(IEnumerable<T> items)
+        {
+            return _store.RemoveAsync(items);
+        }
+
+        public Task AddAsync(T item)
+        {
+            return _store.AddAsync(item);
+        }
+
+        public Task AddAsync(List<T> items)
+        {
+            return _store.AddAsync(items);
         }
     }
 }

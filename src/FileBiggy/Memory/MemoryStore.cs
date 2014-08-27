@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using FileBiggy.Common;
 
 namespace FileBiggy.Memory
@@ -127,6 +128,46 @@ namespace FileBiggy.Memory
             {
                 _lock.ExitWriteLock();
             }
+        }
+
+        public override Task<List<T>> AllAsync()
+        {
+            return Task.FromResult(All());
+        }
+
+        public override Task ClearAsync()
+        {
+            Clear();
+            return Task.FromResult(0);
+        }
+
+        public override Task AddAsync(T item)
+        {
+            Add(item);
+            return Task.FromResult(0);
+        }
+
+        public override Task AddAsync(List<T> items)
+        {
+            Add(items);
+            return Task.FromResult(0);
+        }
+
+        public override Task<T> UpdateAsync(T item)
+        {
+            return Task.FromResult(Update(item));
+        }
+
+        public override Task RemoveAsync(T item)
+        {
+            Remove(item);
+            return Task.FromResult(0);
+        }
+
+        public override Task RemoveAsync(IEnumerable<T> items)
+        {
+            Remove(items);
+            return Task.FromResult(0);
         }
 
         public override T Update(T item)

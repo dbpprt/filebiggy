@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using FileBiggy.Common;
 using FileBiggy.Exceptions;
 using FileBiggy.Properties;
@@ -45,6 +47,16 @@ namespace FileBiggy.Bson
 
                 return _serializer.Deserialize<T>(reader);
             }
+        }
+
+        private Task<T> DeserializeAsync(Stream stream)
+        {
+            return Task.Factory.StartNew(() => Deserialize(stream));
+        }
+
+        private Task SerializeAsync(Stream stream, T entity)
+        {
+            return Task.Factory.StartNew(() => Serialize(stream, entity));
         }
 
         private string FilePath(T entity)
@@ -109,6 +121,62 @@ namespace FileBiggy.Bson
                 using (var fs = File.OpenRead(file))
                 {
                     var entity = Deserialize(fs);
+                    result.Add(GetKey(entity), entity);
+                }
+            }
+
+            return result;
+        }
+
+        protected override Task RemoveFileSystemItemsAsync(IEnumerable<T> items)
+        {
+            RemoveFileSystemItems(items);
+            return Task.FromResult(0);
+        }
+
+        protected override Task AddFileSystemItemAsync(T item)
+        {
+            return UpdateFileSystemItemAsync(item);
+        }
+
+        protected override Task AddFileSystemItemsAsync(List<T> items)
+        {
+            var tasks = items.Select(AddFileSystemItemAsync);
+            return Task.WhenAll(tasks);
+        }
+
+        protected override Task ClearFileSystemItemsAsync()
+        {
+            ClearFileSystemItems();
+            return Task.FromResult(0);
+        }
+
+        protected override Task RemoveFileSystemItemAsync(T item)
+        {
+            RemoveFileSystemItem(item);
+            return Task.FromResult(0);
+        }
+
+        protected override async Task UpdateFileSystemItemAsync(T item)
+        {
+            var file = FilePath(item);
+
+            using (var fs = File.Open(file, FileMode.Create))
+            {
+                await SerializeAsync(fs, item);
+            }
+        }
+
+        protected override async Task<Dictionary<object, T>> InitializeAsync()
+        {
+            var files = Directory.EnumerateFiles(DatabaseDirectory, "*.bson");
+            var result = new Dictionary<object, T>();
+
+            foreach (var file in files)
+            {
+                using (var fs = File.OpenRead(file))
+                {
+                    var entity = await DeserializeAsync(fs);
                     result.Add(GetKey(entity), entity);
                 }
             }

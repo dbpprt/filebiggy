@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace FileBiggy.Contracts
 {
-    public interface IEntitySet<T> : IEnumerable<T>
+    public interface IEntitySet<T> : IEnumerable<T>, IAsyncEntitySet<T>
     {
         void Clear();
         int Count();
