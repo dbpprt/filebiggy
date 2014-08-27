@@ -68,6 +68,7 @@ Let's add some stuff to our created database:
 var movies = jsonContext.Movies;
 var theSameMovies = jsonContext.Set<Movie>();
 
+// or movies.AddAsync in a async application :)
 movies.Add(new Movie
 {
     Genres = new[] { "Action" },
@@ -81,6 +82,7 @@ var darkKnight = movies.Where(movie => movie.Name.Contains("Dark"));
 
 ## Features
 
+- Full Async/Await support (new!)
 - EntitySets are threadsafe (had some problems with biggy's non-threadsafe singleton instances)
 - Dynamic data scheme
 - IdentityAttribute marks a key, and gives you really fast access to these entities
