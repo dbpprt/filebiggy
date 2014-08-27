@@ -21,7 +21,6 @@ namespace FileBiggy.Tests
             public EntityContext()
                 : base("provider=FileBiggy.Memory.MemoryStore`1")
             {
-
             }
         }
 
@@ -45,8 +44,6 @@ namespace FileBiggy.Tests
 
             entities.Add(entity);
             Assert.Throws<ArgumentException>(() => entities.Add(anotherEntity));
-
         }
-
     }
 }

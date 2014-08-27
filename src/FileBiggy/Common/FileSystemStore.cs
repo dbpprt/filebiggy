@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using FileBiggy.Exceptions;
@@ -111,7 +110,7 @@ namespace FileBiggy.Common
             try
             {
                 _lock.EnterWriteLock();
-                
+
                 // this is not nice.. you want to add 10 items, it inserts 8 and the
                 // ninth gets a duplicate key exception
                 foreach (var item in items)
@@ -125,7 +124,6 @@ namespace FileBiggy.Common
             {
                 _lock.ExitWriteLock();
             }
-
         }
 
         public override T Update(T item)

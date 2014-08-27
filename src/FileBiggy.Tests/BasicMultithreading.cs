@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using FileBiggy.Attributes;
 using FileBiggy.Contracts;
@@ -17,6 +16,7 @@ namespace FileBiggy.Tests
         {
             [Identity]
             public Guid SKU { get; set; }
+
             public string Name { get; set; }
             public Decimal Price { get; set; }
         }
@@ -26,13 +26,12 @@ namespace FileBiggy.Tests
             public EntityContext(string connectionString)
                 : base(connectionString)
             {
-
             }
 
             public EntitySet<Widget> Widgets { get; set; }
         }
 
-        IEntitySet<Widget> _widgets;
+        private IEntitySet<Widget> _widgets;
         private string path;
 
         public BasicMultithreading()
@@ -40,7 +39,7 @@ namespace FileBiggy.Tests
             path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "test-data", Guid.NewGuid().ToString());
         }
 
-        void Recreate(bool clear = true)
+        private void Recreate(bool clear = true)
         {
             var context = ContextFactory.Create<EntityContext>()
                 .AsJsonDatabase()
@@ -51,7 +50,7 @@ namespace FileBiggy.Tests
             if (clear) _widgets.Clear();
         }
 
-        void BsonRecreate(bool clear = true)
+        private void BsonRecreate(bool clear = true)
         {
             var context = ContextFactory.Create<EntityContext>()
                 .AsBsonDatabase()
@@ -62,7 +61,7 @@ namespace FileBiggy.Tests
             if (clear) _widgets.Clear();
         }
 
-        void AddSomeItems(int count)
+        private void AddSomeItems(int count)
         {
             for (var i = 0; i < count; i++)
             {
@@ -75,12 +74,12 @@ namespace FileBiggy.Tests
             }
         }
 
-        void QuerySomething()
+        private void QuerySomething()
         {
             var matches = _widgets.AsQueryable().Where(_ => _.SKU.ToString().Contains("d1"));
         }
 
-        void EnumerateSomething()
+        private void EnumerateSomething()
         {
             foreach (var widget in _widgets)
             {
@@ -109,7 +108,7 @@ namespace FileBiggy.Tests
 
             Recreate(false);
 
-            Assert.Equal(inserts * taskCount, _widgets.Count());
+            Assert.Equal(inserts*taskCount, _widgets.Count());
         }
 
         [Fact]
@@ -131,7 +130,7 @@ namespace FileBiggy.Tests
 
             Recreate(false);
 
-            Assert.Equal(inserts * taskCount, _widgets.Count());
+            Assert.Equal(inserts*taskCount, _widgets.Count());
         }
 
         [Fact]
@@ -155,7 +154,7 @@ namespace FileBiggy.Tests
 
             BsonRecreate(false);
 
-            Assert.Equal(inserts * taskCount, _widgets.Count());
+            Assert.Equal(inserts*taskCount, _widgets.Count());
         }
 
         [Fact]
@@ -177,7 +176,7 @@ namespace FileBiggy.Tests
 
             BsonRecreate(false);
 
-            Assert.Equal(inserts * taskCount, _widgets.Count());
+            Assert.Equal(inserts*taskCount, _widgets.Count());
         }
     }
 }

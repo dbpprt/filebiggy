@@ -12,10 +12,9 @@ namespace FileBiggy.Json
     [UsedImplicitly]
     public class JsonStore<T> : FileSystemStore<T> where T : new()
     {
-        public JsonStore(Dictionary<string, string> connectionString) 
+        public JsonStore(Dictionary<string, string> connectionString)
             : base(connectionString)
         {
-
         }
 
         protected string DatabaseFilePath
@@ -96,6 +95,7 @@ namespace FileBiggy.Json
                 FlushToDisk(stream, Items.Select(tuple => tuple.Value).ToList());
             }
         }
+
         protected override void UpdateFileSystemItem(T item)
         {
             // this is really ulgy.. updating 1 item causes the entire database file to be rewritten 

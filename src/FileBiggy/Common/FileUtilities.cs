@@ -8,7 +8,9 @@ namespace FileBiggy.Common
         {
             if (!File.Exists(path))
             {
-                using (File.Create(path)) { }
+                using (File.Create(path))
+                {
+                }
             }
 
             return path;

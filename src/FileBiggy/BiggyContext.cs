@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using FileBiggy.Common;
@@ -30,12 +29,13 @@ namespace FileBiggy
             var tuples = segments
                 .Select(segment => segment.Split(ConnectionStringConstants.SegmentSeperator))
                 .ToDictionary(parts => parts.First().ToLowerInvariant().Trim(), parts => parts.Last().Trim());
-            
+
             string provider;
             if (!tuples.TryGetValue(ConnectionStringConstants.Provider, out provider))
             {
                 throw new InvalidConnectionStringException(
-                    String.Format("ConnectionString must provide a valid {0} segment", ConnectionStringConstants.Provider), 
+                    String.Format("ConnectionString must provide a valid {0} segment",
+                        ConnectionStringConstants.Provider),
                     connectionString);
             }
 
@@ -44,7 +44,8 @@ namespace FileBiggy
 
             if (providerType == null)
             {
-                throw new InvalidProviderException("The requested provider was not found in any loaded assembly", provider);
+                throw new InvalidProviderException("The requested provider was not found in any loaded assembly",
+                    provider);
             }
 
             UnderlayingStore = providerType;
@@ -80,7 +81,8 @@ namespace FileBiggy
                     }
                     catch (ArgumentException)
                     {
-                        throw new EntityTypeException("Only one entity type per context is allowed.", genericTypeArgument.FullName);
+                        throw new EntityTypeException("Only one entity type per context is allowed.",
+                            genericTypeArgument.FullName);
                     }
 
                     propertyInfo.SetValue(this, biggyInstance);
@@ -98,6 +100,6 @@ namespace FileBiggy
             object result;
             _typeStores.TryGetValue(entityType, out result);
             return result;
-        } 
+        }
     }
 }

@@ -11,7 +11,7 @@ namespace FileBiggy.Factory
 
         public ContextBuilder()
         {
-            Tuples = new Dictionary<string, string>();    
+            Tuples = new Dictionary<string, string>();
         }
     }
 
@@ -25,13 +25,13 @@ namespace FileBiggy.Factory
 
         public static BsonContextBuilder<T> AsBsonDatabase<T>(this ContextBuilder<T> contextBuilder)
         {
-            contextBuilder.Tuples.Add(ConnectionStringConstants.Provider, typeof(BsonStore<>).FullName);
+            contextBuilder.Tuples.Add(ConnectionStringConstants.Provider, typeof (BsonStore<>).FullName);
             return new BsonContextBuilder<T>(contextBuilder.Tuples);
         }
 
         public static Builder<T> AsInMemoryDatabase<T>(this ContextBuilder<T> contextBuilder)
         {
-            contextBuilder.Tuples.Add(ConnectionStringConstants.Provider, typeof(MemoryStore<>).FullName);
+            contextBuilder.Tuples.Add(ConnectionStringConstants.Provider, typeof (MemoryStore<>).FullName);
             return new Builder<T>(contextBuilder.Tuples);
         }
     }

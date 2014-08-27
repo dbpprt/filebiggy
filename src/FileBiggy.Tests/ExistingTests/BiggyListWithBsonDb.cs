@@ -16,22 +16,22 @@ namespace FileBiggy.Tests.ExistingTests
         {
             [Identity]
             public Guid SKU { get; set; }
+
             public string Name { get; set; }
             public Decimal Price { get; set; }
         }
 
         public class EntityContext : BiggyContext
         {
-            public EntityContext(string connectionString) 
+            public EntityContext(string connectionString)
                 : base(connectionString)
             {
-
             }
 
-            public EntitySet<Widget> Widgets { get; set; } 
+            public EntitySet<Widget> Widgets { get; set; }
         }
 
-        IEntitySet<Widget> _widgets;
+        private IEntitySet<Widget> _widgets;
         private string path;
 
         private Guid g1 = Guid.NewGuid();
@@ -58,7 +58,7 @@ namespace FileBiggy.Tests.ExistingTests
         {
             Recreate();
             _widgets.Clear();
-            _widgets.Add(new Widget { SKU = g1, Name = "Test widget 1", Price = 2.00M });
+            _widgets.Add(new Widget {SKU = g1, Name = "Test widget 1", Price = 2.00M});
 
             Recreate();
 
@@ -72,10 +72,10 @@ namespace FileBiggy.Tests.ExistingTests
         {
             Recreate();
             _widgets.Clear();
-            _widgets.Add(new Widget { SKU = g1, Name = "Test widget 1", Price = 2.00M });
+            _widgets.Add(new Widget {SKU = g1, Name = "Test widget 1", Price = 2.00M});
 
             Recreate();
-            _widgets.Add(new Widget { SKU = g2, Name = "Test widget 2", Price = 4.00M });
+            _widgets.Add(new Widget {SKU = g2, Name = "Test widget 2", Price = 4.00M});
 
             var addedItem = _widgets.FirstOrDefault(w => w.SKU == g1);
             Assert.True(addedItem != null && _widgets.Count() == 2);
@@ -108,13 +108,13 @@ namespace FileBiggy.Tests.ExistingTests
         {
             Recreate();
             _widgets.Clear();
-            _widgets.Add(new Widget { SKU = g1, Name = "Test widget 1", Price = 2.00M });
+            _widgets.Add(new Widget {SKU = g1, Name = "Test widget 1", Price = 2.00M});
 
             Recreate();
 
             var removeMe = _widgets.FirstOrDefault();
             _widgets.Remove(removeMe);
-            
+
             Recreate();
 
             Assert.True(!_widgets.Any());
@@ -131,7 +131,7 @@ namespace FileBiggy.Tests.ExistingTests
             var batch = new List<Widget>();
             for (int i = 0; i < INSERT_QTY; i++)
             {
-                batch.Add(new Widget { SKU = Guid.NewGuid(), Name = string.Format("Test widget {0}", i), Price = 2.00M });
+                batch.Add(new Widget {SKU = Guid.NewGuid(), Name = string.Format("Test widget {0}", i), Price = 2.00M});
             }
             _widgets.Add(batch);
 
@@ -149,7 +149,12 @@ namespace FileBiggy.Tests.ExistingTests
             var batch = new List<Widget>();
             for (int i = 0; i < INSERT_QTY; i++)
             {
-                batch.Add(new Widget { SKU = Guid.NewGuid(), Name = string.Format("Test widget {0}", i), Price = 2.00M + i });
+                batch.Add(new Widget
+                {
+                    SKU = Guid.NewGuid(),
+                    Name = string.Format("Test widget {0}", i),
+                    Price = 2.00M + i
+                });
             }
             _widgets.Add(batch);
             Recreate();
@@ -165,4 +170,3 @@ namespace FileBiggy.Tests.ExistingTests
         }
     }
 }
-

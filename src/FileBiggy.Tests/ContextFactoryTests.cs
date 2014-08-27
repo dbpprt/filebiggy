@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using FileBiggy.Attributes;
 using FileBiggy.Factory;
 using FileBiggy.Json;
@@ -24,10 +23,9 @@ namespace FileBiggy.Tests
             public EntityContext(string connectionString)
                 : base(connectionString)
             {
-
             }
 
-            public EntitySet<Entity> Entities { get; set; } 
+            public EntitySet<Entity> Entities { get; set; }
         }
 
         [Fact]
@@ -36,8 +34,8 @@ namespace FileBiggy.Tests
             var context = ContextBuilderExtensions.AsInMemoryDatabase(ContextFactory.Create<EntityContext>())
                 .Build();
 
-            Assert.IsType(typeof(EntityContext), context);
-            Assert.Equal(context.UnderlayingStore, typeof(MemoryStore<>));
+            Assert.IsType(typeof (EntityContext), context);
+            Assert.Equal(context.UnderlayingStore, typeof (MemoryStore<>));
         }
 
         [Fact]
@@ -45,11 +43,12 @@ namespace FileBiggy.Tests
         {
             var context = ContextFactory.Create<EntityContext>()
                 .AsJsonDatabase()
-                .WithDatabaseDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tests-", Guid.NewGuid().ToString()))
+                .WithDatabaseDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tests-",
+                    Guid.NewGuid().ToString()))
                 .Build();
 
-            Assert.IsType(typeof(EntityContext), context);
-            Assert.Equal(context.UnderlayingStore, typeof(JsonStore<>));
+            Assert.IsType(typeof (EntityContext), context);
+            Assert.Equal(context.UnderlayingStore, typeof (JsonStore<>));
         }
     }
 }

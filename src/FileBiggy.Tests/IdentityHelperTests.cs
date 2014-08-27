@@ -64,9 +64,9 @@ namespace FileBiggy.Tests
 
             var identity = obj.GetKeyFromEntity();
 
-            Assert.IsType(typeof(int), identity);
+            Assert.IsType(typeof (int), identity);
 
-            var value = (int)identity;
+            var value = (int) identity;
             Assert.Equal(value, 37);
         }
 

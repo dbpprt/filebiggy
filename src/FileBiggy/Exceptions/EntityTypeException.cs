@@ -11,6 +11,5 @@ namespace FileBiggy.Exceptions
         {
             Type = type;
         }
-        
     }
 }

@@ -6,7 +6,7 @@ namespace FileBiggy.Exceptions
     {
         public IdentityAttributeMismatchException(string message)
             : base(message)
-        { }
-        
+        {
+        }
     }
 }

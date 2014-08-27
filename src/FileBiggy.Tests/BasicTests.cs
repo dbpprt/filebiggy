@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using FileBiggy.Attributes;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xunit;
 
 namespace FileBiggy.Tests
@@ -18,11 +16,10 @@ namespace FileBiggy.Tests
 
         public class EntityContext : BiggyContext
         {
-            public EntitySet<Entity> Entities { get; set; } 
+            public EntitySet<Entity> Entities { get; set; }
 
             public EntityContext() : base("provider=FileBiggy.Memory.MemoryStore`1")
             {
-
             }
         }
 
@@ -39,7 +36,6 @@ namespace FileBiggy.Tests
             });
 
             var all = entities.AsQueryable().ToList();
-
         }
     }
 }

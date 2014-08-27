@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using FileBiggy.Common;
-using FileBiggy.Contracts;
 
 namespace FileBiggy.Memory
 {
@@ -17,7 +16,7 @@ namespace FileBiggy.Memory
         private readonly ReaderWriterLockSlim _lock;
         private readonly Dictionary<object, T> _items;
 
-        public MemoryStore(Dictionary<string, string> connectionString) 
+        public MemoryStore(Dictionary<string, string> connectionString)
             : base(connectionString)
         {
             _items = new Dictionary<object, T>();
@@ -53,9 +52,8 @@ namespace FileBiggy.Memory
             }
             finally
             {
-                _lock.ExitWriteLock();    
+                _lock.ExitWriteLock();
             }
-           
         }
 
         public override List<T> All()

@@ -10,6 +10,5 @@ namespace FileBiggy.Exceptions
         {
             ConnectionString = connectionString;
         }
-        
     }
 }

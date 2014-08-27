@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace FileBiggy.Common
 {
     // http://stackoverflow.com/questions/2276384/loading-a-generic-type-by-name-when-the-generics-arguments-come-from-multiple-as
-    static class TypeHelper
+    internal static class TypeHelper
     {
         /// <summary>
         /// Gets the type associated with the specified name.
@@ -86,7 +83,7 @@ namespace FileBiggy.Common
             Type type = null;
 
             if (customAssemblies != null
-               && customAssemblies.Length > 0)
+                && customAssemblies.Length > 0)
             {
                 foreach (var assembly in customAssemblies)
                 {

@@ -20,10 +20,10 @@ namespace FileBiggy.Bson
         {
             // BsonStore only accepts guid as identity 
             // because we want to name files with the key
-            var identity = typeof(T).GetKeyFromEntityType();
-            if (identity.PropertyType != typeof(Guid))
+            var identity = typeof (T).GetKeyFromEntityType();
+            if (identity.PropertyType != typeof (Guid))
             {
-                throw new InvalidIdentityTypeException("BsonStore requires a Guid identity", typeof(Guid));
+                throw new InvalidIdentityTypeException("BsonStore requires a Guid identity", typeof (Guid));
             }
 
             _serializer = new JsonSerializer();
@@ -49,7 +49,7 @@ namespace FileBiggy.Bson
 
         private string FilePath(T entity)
         {
-            return Path.Combine(DatabaseDirectory, ((Guid)GetKey(entity)).ToString() + FileExtension);
+            return Path.Combine(DatabaseDirectory, ((Guid) GetKey(entity)).ToString() + FileExtension);
         }
 
         protected override void RemoveFileSystemItems(IEnumerable<T> items)

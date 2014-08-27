@@ -11,6 +11,5 @@ namespace FileBiggy.Exceptions
         {
             Provider = provider;
         }
-        
     }
 }

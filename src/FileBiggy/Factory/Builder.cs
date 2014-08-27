@@ -19,14 +19,15 @@ namespace FileBiggy.Factory
 
             foreach (var tuple in _tuples)
             {
-                var segment = String.Format("{0}{1}{2}", tuple.Key, ConnectionStringConstants.SegmentSeperator, tuple.Value);
+                var segment = String.Format("{0}{1}{2}", tuple.Key, ConnectionStringConstants.SegmentSeperator,
+                    tuple.Value);
                 segments.Add(segment);
             }
 
             var connectionString = string.Join(
-                ConnectionStringConstants.TupleSeperator.ToString(CultureInfo.InvariantCulture), 
+                ConnectionStringConstants.TupleSeperator.ToString(CultureInfo.InvariantCulture),
                 segments);
-            return (T)Activator.CreateInstance(typeof (T), connectionString);
+            return (T) Activator.CreateInstance(typeof (T), connectionString);
         }
     }
 }
