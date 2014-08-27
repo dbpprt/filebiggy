@@ -51,6 +51,7 @@ var jsonContext = ContextFactory.Create<MovieContext>()
     .WithDatabaseDirectory("C:\\mydatabase")
     .Build();
 
+// this wont work. you need to change Movie's identity from string to Guid
 var bsonContext = ContextFactory.Create<MovieContext>()
     .AsBsonDatabase()
     .WithDatabaseDirectory("C:\\mydatabase")
