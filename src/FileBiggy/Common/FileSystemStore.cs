@@ -9,12 +9,10 @@ namespace FileBiggy.Common
 {
     public abstract class FileSystemStore<T> : StoreBase<T> where T : new()
     {
-        private Dictionary<object, T> _items;
+        protected Dictionary<object, T> Items { get; private set; }
         private readonly ReaderWriterLockSlim _lock;
 
         protected string DatabaseDirectory { get; private set; }
-
-        protected abstract string DatabaseFilePath { get; }
 
         protected FileSystemStore(Dictionary<string, string> connectionString)
             : base(connectionString)
@@ -38,16 +36,7 @@ namespace FileBiggy.Common
             {
                 _lock.EnterWriteLock();
 
-                List<T> result;
-                using (var stream = File.OpenRead(DatabaseFilePath))
-                {
-                    result = Load(stream);
-                }
-
-                _items = result.ToDictionary(
-                    GetKey,
-                    value => value
-                    );
+                Items = Initialize();
             }
             finally
             {
@@ -62,7 +51,7 @@ namespace FileBiggy.Common
                 _lock.EnterReadLock();
                 T result;
 
-                if (_items.TryGetValue(id, out result))
+                if (Items.TryGetValue(id, out result))
                 {
                     return result;
                 }
@@ -75,18 +64,12 @@ namespace FileBiggy.Common
             }
         }
 
-        private object GetKey(T item)
-        {
-            var identity = item.GetKeyFromEntity();
-            return identity ?? Guid.NewGuid();
-        }
-
         public override List<T> All()
         {
             try
             {
                 _lock.EnterReadLock();
-                return _items.Select(tuple => tuple.Value).ToList();
+                return Items.Select(tuple => tuple.Value).ToList();
             }
             finally
             {
@@ -100,11 +83,8 @@ namespace FileBiggy.Common
             {
                 _lock.EnterWriteLock();
 
-                _items = new Dictionary<object, T>();
-                using (var stream = new FileStream(DatabaseFilePath, FileMode.Create))
-                {
-                    FlushToDisk(stream, new List<T>());
-                }
+                Items = new Dictionary<object, T>();
+                ClearFileSystemItems();
             }
             finally
             {
@@ -117,11 +97,8 @@ namespace FileBiggy.Common
             try
             {
                 _lock.EnterWriteLock();
-                using (var stream = new FileStream(DatabaseFilePath, FileMode.Append))
-                {
-                    Append(stream, new List<T> { item });
-                }
-                _items.Add(GetKey(item), item);
+                Items.Add(GetKey(item), item);
+                AddFileSystemItem(item);
             }
             finally
             {
@@ -134,17 +111,15 @@ namespace FileBiggy.Common
             try
             {
                 _lock.EnterWriteLock();
-                using (var stream = new FileStream(DatabaseFilePath, FileMode.Append))
-                {
-                    Append(stream, items);
-                }
-
+                
                 // this is not nice.. you want to add 10 items, it inserts 8 and the
                 // ninth gets a duplicate key exception
                 foreach (var item in items)
                 {
-                    _items.Add(GetKey(item), item);
+                    Items.Add(GetKey(item), item);
                 }
+
+                AddFileSystemItems(items);
             }
             finally
             {
@@ -159,14 +134,10 @@ namespace FileBiggy.Common
             {
                 _lock.EnterWriteLock();
 
-                _items.Remove(GetKey(item));
-                _items.Add(GetKey(item), item);
+                Items.Remove(GetKey(item));
+                Items.Add(GetKey(item), item);
 
-                // this is really ulgy.. updating 1 item causes the entire database file to be rewritten 
-                using (var stream = new FileStream(DatabaseFilePath, FileMode.Create))
-                {
-                    FlushToDisk(stream, _items.Select(tuple => tuple.Value).ToList());
-                }
+                UpdateFileSystemItem(item);
 
                 return item;
             }
@@ -181,13 +152,9 @@ namespace FileBiggy.Common
             try
             {
                 _lock.EnterWriteLock();
-                _items.Remove(GetKey(item));
+                Items.Remove(GetKey(item));
 
-                // this is really ulgy.. updating 1 item causes the entire database file to be rewritten 
-                using (var stream = new FileStream(DatabaseFilePath, FileMode.Create))
-                {
-                    FlushToDisk(stream, _items.Select(tuple => tuple.Value).ToList());
-                }
+                RemoveFileSystemItem(item);
             }
             finally
             {
@@ -197,15 +164,14 @@ namespace FileBiggy.Common
 
         public override void Remove(IEnumerable<T> items)
         {
-            foreach (var item in items)
+            var enumerable = items as T[] ?? items.ToArray();
+
+            foreach (var item in enumerable)
             {
-                _items.Remove(GetKey(item));
+                Items.Remove(GetKey(item));
             }
 
-            using (var stream = new FileStream(DatabaseFilePath, FileMode.Create))
-            {
-                FlushToDisk(stream, _items.Select(tuple => tuple.Value).ToList());
-            }
+            RemoveFileSystemItems(enumerable);
         }
 
         public override IQueryable<T> AsQueryable()
@@ -213,7 +179,7 @@ namespace FileBiggy.Common
             try
             {
                 _lock.EnterReadLock();
-                return _items.Select(tuple => tuple.Value).ToList().AsQueryable();
+                return Items.Select(tuple => tuple.Value).ToList().AsQueryable();
             }
             finally
             {
@@ -221,10 +187,18 @@ namespace FileBiggy.Common
             }
         }
 
-        public abstract List<T> Load(Stream stream);
+        protected abstract void RemoveFileSystemItems(IEnumerable<T> items);
 
-        public abstract void FlushToDisk(Stream stream, List<T> items);
+        protected abstract void AddFileSystemItem(T item);
 
-        public abstract void Append(Stream stream, IEnumerable<T> items);
+        protected abstract void AddFileSystemItems(List<T> item);
+
+        protected abstract void ClearFileSystemItems();
+
+        protected abstract void RemoveFileSystemItem(T item);
+
+        protected abstract void UpdateFileSystemItem(T item);
+
+        protected abstract Dictionary<object, T> Initialize();
     }
 }

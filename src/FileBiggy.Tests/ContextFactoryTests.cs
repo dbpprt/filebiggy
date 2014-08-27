@@ -33,8 +33,7 @@ namespace FileBiggy.Tests
         [Fact]
         public void Create_Memory_Store()
         {
-            var context = ContextFactory.Create<EntityContext>()
-                .AsInMemoryDatabase()
+            var context = ContextBuilderExtensions.AsInMemoryDatabase(ContextFactory.Create<EntityContext>())
                 .Build();
 
             Assert.IsType(typeof(EntityContext), context);

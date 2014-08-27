@@ -47,7 +47,9 @@
   <ItemGroup>
     <Compile Include="Attributes\IdentityAttribute.cs" />
     <Compile Include="BiggyContext.cs" />
+    <Compile Include="Bson\BsonStore.cs" />
     <Compile Include="ConnectionStringConstants.cs" />
+    <Compile Include="Exceptions\InvalidIdentityTypeException.cs" />
     <Compile Include="Factory\Builder.cs" />
     <Compile Include="Factory\ContextBuilder.cs" />
     <Compile Include="Factory\ContextFactory.cs" />
@@ -61,6 +63,7 @@
     <Compile Include="Exceptions\InvalidConnectionStringException.cs" />
     <Compile Include="Exceptions\EntityTypeException.cs" />
     <Compile Include="Exceptions\InvalidProviderException.cs" />
+    <Compile Include="Factory\BsonContextBuilder.cs" />
     <Compile Include="Factory\JsonContextBuilder.cs" />
     <Compile Include="Json\BiggyListSerializer.cs" />
     <Compile Include="Common\FileSystemStore.cs" />

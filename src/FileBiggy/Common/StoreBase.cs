@@ -24,6 +24,12 @@ namespace FileBiggy.Common
             }
         }
 
+        protected virtual object GetKey(T item)
+        {
+            var identity = item.GetKeyFromEntity();
+            return identity ?? item.GetHashCode();
+        }
+
         public abstract T Find(object id);
         public abstract List<T> All();
         public abstract void Clear();

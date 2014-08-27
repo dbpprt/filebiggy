@@ -44,12 +44,6 @@ namespace FileBiggy.Memory
             }
         }
 
-        private object GetKey(T item)
-        {
-            var identity = item.GetKeyFromEntity();
-            return identity ?? Guid.NewGuid();
-        }
-
         public override void Add(T item)
         {
             try

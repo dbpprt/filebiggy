@@ -18,7 +18,7 @@ namespace FileBiggy.Json
 
         }
 
-        protected override string DatabaseFilePath
+        protected string DatabaseFilePath
         {
             get
             {
@@ -27,14 +27,14 @@ namespace FileBiggy.Json
             }
         }
 
-        public override List<T> Load(Stream stream)
+        protected List<T> Load(Stream stream)
         {
             var reader = new StreamReader(stream);
             var json = "[" + reader.ReadToEnd().Replace(Environment.NewLine, ",") + "]";
             return JsonConvert.DeserializeObject<List<T>>(json);
         }
 
-        public override void FlushToDisk(Stream stream, List<T> items)
+        protected void FlushToDisk(Stream stream, List<T> items)
         {
             using (var outstream = new StreamWriter(stream))
             {
@@ -45,7 +45,7 @@ namespace FileBiggy.Json
             }
         }
 
-        public override void Append(Stream stream, IEnumerable<T> items)
+        protected void Append(Stream stream, IEnumerable<T> items)
         {
             using (var writer = new StreamWriter(stream))
             {
@@ -54,6 +54,69 @@ namespace FileBiggy.Json
                     writer.WriteLine(json);
                 }
             }
+        }
+
+        protected override void RemoveFileSystemItems(IEnumerable<T> items)
+        {
+            using (var stream = new FileStream(DatabaseFilePath, FileMode.Create))
+            {
+                FlushToDisk(stream, Items.Select(tuple => tuple.Value).ToList());
+            }
+        }
+
+        protected override void AddFileSystemItem(T item)
+        {
+            using (var stream = new FileStream(DatabaseFilePath, FileMode.Append))
+            {
+                Append(stream, new[] {item});
+            }
+        }
+
+        protected override void AddFileSystemItems(List<T> item)
+        {
+            using (var stream = new FileStream(DatabaseFilePath, FileMode.Append))
+            {
+                Append(stream, Items.Select(_ => _.Value));
+            }
+        }
+
+        protected override void ClearFileSystemItems()
+        {
+            using (var stream = new FileStream(DatabaseFilePath, FileMode.Create))
+            {
+                FlushToDisk(stream, new List<T>());
+            }
+        }
+
+        protected override void RemoveFileSystemItem(T item)
+        {
+            // this is really ulgy.. updating 1 item causes the entire database file to be rewritten 
+            using (var stream = new FileStream(DatabaseFilePath, FileMode.Create))
+            {
+                FlushToDisk(stream, Items.Select(tuple => tuple.Value).ToList());
+            }
+        }
+        protected override void UpdateFileSystemItem(T item)
+        {
+            // this is really ulgy.. updating 1 item causes the entire database file to be rewritten 
+            using (var stream = new FileStream(DatabaseFilePath, FileMode.Create))
+            {
+                FlushToDisk(stream, Items.Select(tuple => tuple.Value).ToList());
+            }
+        }
+
+        protected override Dictionary<object, T> Initialize()
+        {
+            List<T> result;
+            using (var stream = File.OpenRead(DatabaseFilePath))
+            {
+                result = Load(stream);
+            }
+
+            return result.ToDictionary(
+                GetKey,
+                value => value
+                );
         }
     }
 }

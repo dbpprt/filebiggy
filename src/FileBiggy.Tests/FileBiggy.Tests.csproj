@@ -56,6 +56,7 @@
     <Compile Include="BasicMultithreading.cs" />
     <Compile Include="ContextFactoryTests.cs" />
     <Compile Include="BasicTests.cs" />
+    <Compile Include="ExistingTests\BiggyListWithBsonDb.cs" />
     <Compile Include="ExistingTests\BiggyListWithFileDb.cs" />
     <Compile Include="IdentityHelperTests.cs" />
     <Compile Include="IdentityMemoryStoreTests.cs" />

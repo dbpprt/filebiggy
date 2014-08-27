@@ -16,7 +16,7 @@ namespace FileBiggy.Tests
         public class Widget
         {
             [Identity]
-            public string SKU { get; set; }
+            public Guid SKU { get; set; }
             public string Name { get; set; }
             public Decimal Price { get; set; }
         }
@@ -51,13 +51,24 @@ namespace FileBiggy.Tests
             if (clear) _widgets.Clear();
         }
 
+        void BsonRecreate(bool clear = true)
+        {
+            var context = ContextFactory.Create<EntityContext>()
+                .AsBsonDatabase()
+                .WithDatabaseDirectory(path)
+                .Build();
+
+            _widgets = context.Set<Widget>();
+            if (clear) _widgets.Clear();
+        }
+
         void AddSomeItems(int count)
         {
             for (var i = 0; i < count; i++)
             {
                 _widgets.Add(new Widget
                 {
-                    SKU = Guid.NewGuid().ToString(),
+                    SKU = Guid.NewGuid(),
                     Name = "test",
                     Price = 214
                 });
@@ -66,7 +77,7 @@ namespace FileBiggy.Tests
 
         void QuerySomething()
         {
-            var matches = _widgets.AsQueryable().Where(_ => _.SKU.Contains("d1"));
+            var matches = _widgets.AsQueryable().Where(_ => _.SKU.ToString().Contains("d1"));
         }
 
         void EnumerateSomething()
@@ -119,6 +130,52 @@ namespace FileBiggy.Tests
             Task.WaitAll(tasks.ToArray());
 
             Recreate(false);
+
+            Assert.Equal(inserts * taskCount, _widgets.Count());
+        }
+
+        [Fact]
+        public void Bson_Multithreaded_Insert()
+        {
+            BsonRecreate();
+
+            var tasks = new List<Task>();
+            var inserts = 10;
+            var taskCount = 100;
+
+            for (int i = 0; i < taskCount; i++)
+            {
+                tasks.Add(new Task(() => AddSomeItems(inserts)));
+                tasks.Add(new Task(QuerySomething));
+                tasks.Add(new Task(EnumerateSomething));
+            }
+
+            tasks.ForEach(_ => _.Start());
+            Task.WaitAll(tasks.ToArray());
+
+            BsonRecreate(false);
+
+            Assert.Equal(inserts * taskCount, _widgets.Count());
+        }
+
+        [Fact]
+        public void Bson_Multithreaded_Mixture()
+        {
+            BsonRecreate();
+
+            var tasks = new List<Task>();
+            var inserts = 10;
+            var taskCount = 100;
+
+            for (int i = 0; i < taskCount; i++)
+            {
+                tasks.Add(new Task(() => AddSomeItems(inserts)));
+            }
+
+            tasks.ForEach(_ => _.Start());
+            Task.WaitAll(tasks.ToArray());
+
+            BsonRecreate(false);
 
             Assert.Equal(inserts * taskCount, _widgets.Count());
         }
