@@ -1,4 +1,7 @@
-# FileBiggy: A simple document store with json, bson, and in memory stores
+# This project has been discontinued
+# I'm moving to a new project [MobileDB](https://github.com/flumbee/mobiledb "MobileDB")
+
+## FileBiggy: A simple document store with json, bson, and in memory stores
 
 I looked for a small embedded database for a small website. I dont want to setup a full database engine just to store some megabytes of data. So i found Rob Connery's biggy which covers my aspects. But biggy implements alot of other features which i dont need, like psql, mongo, etc. So i created FileBiggy which is just a document database with a file storage. 
 
